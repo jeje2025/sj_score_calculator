@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/jeje_score_calculator.html"
+    }
+  ]
+}

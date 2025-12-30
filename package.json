@@ -1,0 +1,9 @@
+{
+  "name": "jeje-score-calculator",
+  "version": "1.0.0",
+  "description": "JeJe Transfer Score Calculator",
+  "scripts": {
+    "dev": "python3 -m http.server 3000",
+    "start": "python3 -m http.server 3000"
+  }
+}
