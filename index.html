@@ -3,24 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>세종대 점수계산 | 제제편입학원</title>
+    <title>편입 점수계산 | 제제편입학원</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         * {
             font-family: 'Noto Sans KR', sans-serif;
             box-sizing: border-box;
         }
-        
+
         body {
             background: linear-gradient(135deg, #FAF5FF 0%, #E9D8FD 100%);
             min-height: 100vh;
             padding: 20px;
             margin: 0;
         }
-        
+
         .container {
             max-width: 750px;
             margin: 0 auto;
+        }
+
+        /* 탭 스타일 */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            background: white;
+            border: none;
+            padding: 16px 24px;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #9F7AEA;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(107, 70, 193, 0.1);
+        }
+
+        .tab:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(107, 70, 193, 0.15);
+        }
+
+        .tab.active {
+            background: linear-gradient(135deg, #6B46C1 0%, #9F7AEA 100%);
+            color: white;
+            box-shadow: 0 6px 25px rgba(107, 70, 193, 0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
         }
         
         .card {
@@ -308,8 +348,16 @@
 </head>
 <body>
     <div class="container">
-        <!-- 계산기 카드 -->
-        <div class="card">
+        <!-- 탭 버튼 -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('sejong')">세종대</button>
+            <button class="tab" onclick="switchTab('hongik')">홍익대</button>
+        </div>
+
+        <!-- 세종대 탭 -->
+        <div id="sejong-tab" class="tab-content active">
+            <!-- 계산기 카드 -->
+            <div class="card">
             <div class="title-area">
                 <div class="title-sub">제제편입</div>
                 <div class="title-main">세종대 필답고사 총점 계산</div>
@@ -479,10 +527,164 @@
             </a>
         </div>
         
-        <div class="footer">@제제편입학원</div>
+            <div class="footer">@제제편입학원</div>
+        </div>
+
+        <!-- 홍익대 탭 -->
+        <div id="hongik-tab" class="tab-content">
+            <!-- 인문계 계산기 -->
+            <div class="card">
+                <div class="title-area">
+                    <div class="title-sub">제제편입</div>
+                    <div class="title-main">홍익대 필기고사 - 인문계열</div>
+                </div>
+
+                <div class="guide">
+                    <span class="guide-icon">💡</span>
+                    영어 <strong>40문항</strong> / 각 <strong>1.875점</strong> / 총 <strong>75점 만점</strong>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">과목</th>
+                            <th style="width: 25%;">맞은 개수</th>
+                            <th style="width: 25%;">배점</th>
+                            <th style="width: 25%;">점수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="part-area">영어</td>
+                            <td class="input-cell">
+                                <input type="number" min="0" max="40" value="0" id="hongik-hum-eng">
+                            </td>
+                            <td>1.875점</td>
+                            <td class="score-cell" id="hongik-hum-eng-score">0</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="2" class="total-label">총점 <span class="total-max">/ 75점 만점</span></td>
+                            <td colspan="1"></td>
+                            <td class="total-score" id="hongik-hum-total">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button class="reset-btn" onclick="resetHongikHum()">🔄 초기화</button>
+            </div>
+
+            <!-- 자연계 계산기 -->
+            <div class="card" style="margin-top: 20px;">
+                <div class="title-area">
+                    <div class="title-sub">제제편입</div>
+                    <div class="title-main">홍익대 필기고사 - 자연계열</div>
+                </div>
+
+                <div class="guide">
+                    <span class="guide-icon">💡</span>
+                    영어 <strong>25문항(각 1.5점)</strong> + 수학 <strong>15문항(각 2.5점)</strong> = <strong>75점 만점</strong>
+                </div>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">과목</th>
+                            <th style="width: 25%;">맞은 개수</th>
+                            <th style="width: 25%;">배점</th>
+                            <th style="width: 25%;">점수</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="part-area">영어</td>
+                            <td class="input-cell">
+                                <input type="number" min="0" max="25" value="0" id="hongik-sci-eng">
+                            </td>
+                            <td>1.5점</td>
+                            <td class="score-cell" id="hongik-sci-eng-score">0</td>
+                        </tr>
+                        <tr>
+                            <td class="part-area">수학</td>
+                            <td class="input-cell">
+                                <input type="number" min="0" max="15" value="0" id="hongik-sci-math">
+                            </td>
+                            <td>2.5점</td>
+                            <td class="score-cell" id="hongik-sci-math-score">0</td>
+                        </tr>
+                        <tr class="total-row">
+                            <td colspan="2" class="total-label">총점 <span class="total-max">/ 75점 만점</span></td>
+                            <td colspan="1"></td>
+                            <td class="total-score" id="hongik-sci-total">0</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <button class="reset-btn" onclick="resetHongikSci()">🔄 초기화</button>
+            </div>
+
+            <!-- 안내 카드 -->
+            <div class="info-card">
+                <div class="info-title">📋 홍익대학교 필기고사 안내</div>
+
+                <div class="info-text">
+                    홍익대학교 필기고사는 계열에 따라 다르게 구성됩니다.
+                </div>
+
+                <div class="info-highlight">
+                    ⚠️ <strong>오답감점 없음</strong> - 틀려도 감점이 없으니 모든 문제를 풀어보세요!
+                </div>
+
+                <table class="info-table">
+                    <thead>
+                        <tr>
+                            <th>계열</th>
+                            <th>구성</th>
+                            <th>배점</th>
+                            <th>총점</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>인문계열</strong></td>
+                            <td>영어 40문항</td>
+                            <td>각 1.875점</td>
+                            <td><strong>75점</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>자연계열</strong></td>
+                            <td>영어 25문항 + 수학 15문항</td>
+                            <td>영어 1.5점 / 수학 2.5점</td>
+                            <td><strong>75점</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 상담 링크 카드 -->
+            <div class="consult-card">
+                <div class="consult-title">편입 준비, 혼자 고민하지 마세요! 🎓</div>
+                <a href="https://pf.kakao.com/_txhTDb" target="_blank" class="consult-btn">
+                    <span>💬</span> 제제편입 수강 상담
+                </a>
+            </div>
+
+            <div class="footer">@제제편입학원</div>
+        </div>
     </div>
-    
+
     <script>
+        // 탭 전환 함수
+        function switchTab(tabName) {
+            // 모든 탭 버튼과 콘텐츠 비활성화
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            // 선택된 탭 활성화
+            event.target.classList.add('active');
+            document.getElementById(tabName + '-tab').classList.add('active');
+        }
+
+        // 세종대 계산 함수
         const partConfig = {
             1: { total: 10, correct: 2.8, wrong: 0.70 },
             2: { total: 5, correct: 3.8, wrong: 0.95 },
@@ -526,19 +728,64 @@
         }
         
         function resetAll() {
-            document.querySelectorAll('input[type="number"]').forEach(input => {
+            document.querySelectorAll('#sejong-tab input[type="number"]').forEach(input => {
                 input.value = 0;
             });
             calculate();
         }
-        
-        // 이벤트 리스너
-        document.querySelectorAll('input[type="number"]').forEach(input => {
+
+        // 세종대 이벤트 리스너
+        document.querySelectorAll('#sejong-tab input[type="number"]').forEach(input => {
             input.addEventListener('input', calculate);
             input.addEventListener('focus', function() { this.select(); });
         });
-        
+
+        // 홍익대 인문계 계산
+        function calculateHongikHum() {
+            const correct = parseInt(document.getElementById('hongik-hum-eng').value) || 0;
+            const score = correct * 1.875;
+            document.getElementById('hongik-hum-eng-score').textContent = score.toFixed(1);
+            document.getElementById('hongik-hum-total').textContent = score.toFixed(1);
+        }
+
+        function resetHongikHum() {
+            document.getElementById('hongik-hum-eng').value = 0;
+            calculateHongikHum();
+        }
+
+        // 홍익대 자연계 계산
+        function calculateHongikSci() {
+            const engCorrect = parseInt(document.getElementById('hongik-sci-eng').value) || 0;
+            const mathCorrect = parseInt(document.getElementById('hongik-sci-math').value) || 0;
+
+            const engScore = engCorrect * 1.5;
+            const mathScore = mathCorrect * 2.5;
+            const totalScore = engScore + mathScore;
+
+            document.getElementById('hongik-sci-eng-score').textContent = engScore.toFixed(1);
+            document.getElementById('hongik-sci-math-score').textContent = mathScore.toFixed(1);
+            document.getElementById('hongik-sci-total').textContent = totalScore.toFixed(1);
+        }
+
+        function resetHongikSci() {
+            document.getElementById('hongik-sci-eng').value = 0;
+            document.getElementById('hongik-sci-math').value = 0;
+            calculateHongikSci();
+        }
+
+        // 홍익대 이벤트 리스너
+        document.getElementById('hongik-hum-eng').addEventListener('input', calculateHongikHum);
+        document.getElementById('hongik-hum-eng').addEventListener('focus', function() { this.select(); });
+
+        document.getElementById('hongik-sci-eng').addEventListener('input', calculateHongikSci);
+        document.getElementById('hongik-sci-eng').addEventListener('focus', function() { this.select(); });
+        document.getElementById('hongik-sci-math').addEventListener('input', calculateHongikSci);
+        document.getElementById('hongik-sci-math').addEventListener('focus', function() { this.select(); });
+
+        // 초기 계산
         calculate();
+        calculateHongikHum();
+        calculateHongikSci();
     </script>
 </body>
 </html>
